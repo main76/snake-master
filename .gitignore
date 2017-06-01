@@ -2,6 +2,12 @@
 Thumbs.db
 ehthumbs.db
 
+# Python cache file
+*.pyc
+
+# Output directories
+output/
+
 # Folder config file
 Desktop.ini
 
