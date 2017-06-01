@@ -36,7 +36,17 @@ class Snake:
         return move()
 
     def __refresh_food(self):
-        return randint(0, self.spaces - 1)
+        states = numpy.zeros(self.area, dtype=int)
+        for node in self.body:
+            states[node] = BODY
+        ti = randint(0, self.spaces - 1)
+        index = 0
+        for i in range(self.area):
+            if index == ti:
+                return i
+            elif states[i] == SPACE:
+                index += 1
+        raise 'Ooops!'
 
     def __left(self):
         head = self.head
@@ -109,13 +119,7 @@ class Snake:
         for node in self.body:
             states[node] = BODY
         states[self.head] = HEAD
-        index = 0
-        for i in range(self.area):
-            if index == self.food:
-                states[i] = FOOD
-                break
-            elif states[i] is SPACE:
-                index += 1
+        states[self.food] = FOOD
         return states
 
 
