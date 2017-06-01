@@ -38,6 +38,6 @@ class Renderer:
         g.display.update()
         self.clock.tick()
         for e in g.event.get():
-            if e.type == g.QUIT:
+            if e.type is g.QUIT:
                 return True
         return False

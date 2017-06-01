@@ -113,7 +113,8 @@ class Snake:
         for i in range(self.area):
             if index == self.food:
                 states[i] = FOOD
-            else:
+                break
+            elif states[i] is SPACE:
                 index += 1
         return states
 
