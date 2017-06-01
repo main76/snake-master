@@ -109,7 +109,12 @@ class Snake:
         for node in self.body:
             states[node] = BODY
         states[self.head] = HEAD
-        states[self.food] = FOOD
+        index = 0
+        for i in range(self.area):
+            if index == self.food:
+                states[i] = FOOD
+            else:
+                index += 1
         return states
 
 
