@@ -3,7 +3,7 @@ import numpy as np
 
 LEARNING_RATE = 0.001
 
-EMBEDDING_DIM = 256
+HIDDEN_DIM = 256
 LSTM_DIM = 128
 
 class Brain:
@@ -14,7 +14,7 @@ class Brain:
     # Correspoding layers implementation - Preferred solution
     def create_model(self, input, action_count):
         z = C.layers.Sequential([
-            C.layers.Embedding(EMBEDDING_DIM),
+            C.layers.Dense(HIDDEN_DIM),
             C.layers.Recurrence(C.layers.LSTM(LSTM_DIM)),
             C.layers.Dense(action_count)
         ])

@@ -2,7 +2,7 @@ from agent import Agent
 from snake import Handler
 import os
 
-TOTAL_EPISODES = 10000
+TOTAL_EPISODES = 1000000
 BATCH_SIZE_BASELINE = 100
 
 SHAPE = WIDTH, HEIGHT = 10, 10
@@ -17,7 +17,7 @@ def run(agent):
     R = 0
 
     while True:
-        # env.render()
+        env.render()
 
         a = agent.act(s)
         s_, r, done, info = env.step(a)
@@ -60,4 +60,6 @@ while episode_number < TOTAL_EPISODES:
         log('Episode: %d, Average score for episode %f.' %
               (episode_number, reward_sum / BATCH_SIZE_BASELINE))
         reward_sum = 0
+    if episode_number % 10000 == 0:
+        save_model('snake.%d.model' % round(episode_number / 10000))
 save_model()
