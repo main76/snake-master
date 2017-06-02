@@ -16,7 +16,7 @@ class Handler:
     def step(self, action):
         reward, done = self.snake.move(action)
         info = None if not done else 'moves: %d, scores: %d, actions: [ %s ]' % (
-            len(self.snake.moves), self.snake.scores,
+            self.moves, self.snake.scores,
             ', '.join(str(x) for x in self.snake.moves))
         return self.snake.states, reward, done, info
 
@@ -25,3 +25,7 @@ class Handler:
         if close:
             self.onexit()
             exit(0)
+
+    @property
+    def moves(self):
+        return len(self.snake.moves)

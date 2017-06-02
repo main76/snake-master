@@ -3,7 +3,7 @@ from snake import Handler
 import os
 
 TOTAL_EPISODES = 640000
-BATCH_SIZE_BASELINE = 20
+BATCH_SIZE_BASELINE = 50
 
 WIDTH, HEIGHT = 10, 10
 STATE_COUNT, ACTION_COUNT = WIDTH * HEIGHT, 3
@@ -26,7 +26,7 @@ def run(agent):
             s_ = None
 
         agent.observe((s, a, r, s_))
-        agent.replay()
+        agent.replay(env.moves)
 
         s = s_
         R += r

@@ -4,10 +4,10 @@ import numpy as np
 from brain import Brain
 from memory import Memory
 
-MEMORY_CAPACITY = 100000
-BATCH_SIZE = 512
+MEMORY_CAPACITY = 10000
+BATCH_SIZE = 64
 
-GAMMA = 0.99  # discount factor
+GAMMA = 0.90  # discount factor
 
 MAX_EPSILON = 1
 MIN_EPSILON = 0.01  # stay a bit curious even when getting old
@@ -41,8 +41,8 @@ class Agent:
         self.epsilon = MIN_EPSILON + (
             MAX_EPSILON - MIN_EPSILON) * math.exp(-LAMBDA * self.steps)
 
-    def replay(self):
-        batch = self.memory.sample(BATCH_SIZE)
+    def replay(self, batch_size = BATCH_SIZE):
+        batch = self.memory.sample(batch_size)
         batchLen = len(batch)
 
         no_state = np.zeros(self.state_count)
