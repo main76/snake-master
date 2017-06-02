@@ -78,7 +78,7 @@ class Snake:
             self.body.insert(0, p)
             done = len(self.body) == self.spaces
             if not done:
-                self.__refresh_food()
+                self.food = self.__refresh_food()
             return REWARD, done
         self.body.pop()
         if p in self.body:
