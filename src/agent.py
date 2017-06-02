@@ -7,7 +7,7 @@ from memory import Memory
 MEMORY_CAPACITY = 10000
 BATCH_SIZE = 64
 
-GAMMA = 0.90  # discount factor
+GAMMA = 0.9  # discount factor
 
 MAX_EPSILON = 1
 MIN_EPSILON = 0.01  # stay a bit curious even when getting old
@@ -53,12 +53,12 @@ class Agent:
     def observe(self, sample):  # in (s, a, r, s_) format
         self.memory.add(sample)
 
+    def replay(self, batch_size=BATCH_SIZE):
         # slowly decrease Epsilon based on our eperience
         self.steps += 1
         self.epsilon = MIN_EPSILON + (
             MAX_EPSILON - MIN_EPSILON) * math.exp(-LAMBDA * self.steps)
 
-    def replay(self, batch_size=BATCH_SIZE):
         batch = self.memory.sample(batch_size)
         batchLen = len(batch)
 
