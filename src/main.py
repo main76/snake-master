@@ -26,7 +26,9 @@ def run(agent):
             s_ = None
 
         agent.observe((s, a, r, s_))
-        agent.replay(env.moves)
+
+        if r is not 0:
+            agent.replay(env.moves)
 
         s = s_
         R += r

@@ -3,10 +3,11 @@ from .renderer import Renderer
 
 
 class Handler:
-    def __init__(self, shape, onexit = None):
+    def __init__(self, shape, onexit=None):
         self.shape = shape
         self.renderer = Renderer(shape)
         self.onexit = onexit
+        self.steps = 0
         self.reset()
 
     def reset(self):
@@ -15,9 +16,8 @@ class Handler:
 
     def step(self, action):
         reward, done = self.snake.move(action)
-        info = None if not done else 'moves: %d, scores: %d, actions: [ %s ]' % (
-            self.moves, self.snake.scores,
-            ', '.join(str(x) for x in self.snake.moves))
+        info = None if not done else 'moves: %d, scores: %d' % (
+            self.snake.total_moves, self.snake.scores)
         return self.snake.states, reward, done, info
 
     def render(self):
@@ -29,4 +29,4 @@ class Handler:
 
     @property
     def moves(self):
-        return len(self.snake.moves)
+        return self.snake.moves

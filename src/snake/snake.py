@@ -18,7 +18,8 @@ class Snake:
         self.area = area
         self.width = width
         self.height = height
-        self.moves = []
+        self.total_moves = 0
+        self.start = 0
         self.scores = 0
         self.food = self.__refresh_food()
         self.__moves = [self.__up, self.__left, self.__down, self.__right]
@@ -32,7 +33,7 @@ class Snake:
         # 2 - turn counterclockwisely
         direction = (action - 1 + self.heading) % 4  # magic
         move = self.__moves[direction]
-        self.moves.append(action)
+        self.total_moves += 1
         return move()
 
     def __refresh_food(self):
@@ -75,6 +76,7 @@ class Snake:
     def __move(self, p):
         if self.food == p:
             self.scores += 1
+            self.start = self.total_moves
             self.body.insert(0, p)
             done = len(self.body) == self.spaces
             if not done:
@@ -85,6 +87,10 @@ class Snake:
             return PUNISHMENT, True
         self.body.insert(0, p)
         return NO_REWARD, False
+
+    @property
+    def moves(self):
+        return self.total_moves - self.start
 
     @property
     def heading(self):
