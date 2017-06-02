@@ -1,4 +1,12 @@
 {
     "python.linting.pylintEnabled": false,
-    "python.formatting.provider": "yapf"
+    "python.formatting.provider": "yapf",
+    "files.exclude": {
+        "**/.git": true,
+        "**/.svn": true,
+        "**/.hg": true,
+        "**/CVS": true,
+        "**/.DS_Store": true,
+        "**/__pycache__/**": true
+    }
 }
