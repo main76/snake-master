@@ -3,7 +3,7 @@ from snake import Handler
 import os
 
 TOTAL_EPISODES = 640000
-BATCH_SIZE_BASELINE = 50
+BATCH_SIZE_BASELINE = 100
 
 WIDTH, HEIGHT = 10, 10
 STATE_COUNT, ACTION_COUNT = WIDTH * HEIGHT, 3
@@ -35,14 +35,20 @@ def run(agent):
             print(info)
             return R
 
-
 def save_model(name='snake.model'):
-    abs_path = os.path.dirname(os.path.abspath(__file__))
-    out_path = os.path.join(abs_path, '..', 'output')
-    os.makedirs(out_path, exist_ok=True)
-    os.chdir(out_path)
     agent.brain.model.save(name)
 
+def log(text):
+    print(text)
+    with open('log.txt', mode='a') as fs:
+        fs.write(text)
+        fs.write('\n')
+
+
+abs_path = os.path.dirname(os.path.abspath(__file__))
+out_path = os.path.join(abs_path, '..', 'output')
+os.makedirs(out_path, exist_ok=True)
+os.chdir(out_path)
 
 episode_number = 0
 reward_sum = 0
@@ -51,7 +57,7 @@ while episode_number < TOTAL_EPISODES:
     reward_sum += run(agent)
     episode_number += 1
     if episode_number % BATCH_SIZE_BASELINE == 0:
-        print('Episode: %d, Average score for episode %f.' %
+        log('Episode: %d, Average score for episode %f.' %
               (episode_number, reward_sum / BATCH_SIZE_BASELINE))
         reward_sum = 0
 save_model()

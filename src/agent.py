@@ -7,7 +7,7 @@ from memory import Memory
 MEMORY_CAPACITY = 10000
 BATCH_SIZE = 64
 
-GAMMA = 0.90  # discount factor
+GAMMA = 0.95  # discount factor
 
 MAX_EPSILON = 1
 MIN_EPSILON = 0.01  # stay a bit curious even when getting old
@@ -25,12 +25,29 @@ class Agent:
         self.action_count = ACTION_COUNT
 
     def act(self, s):
-        action = 0
+        action = -1
         if random.random() < self.epsilon:
             action = random.randint(0, self.action_count - 1)
         else:
-            predictions = self.brain.predict(s.astype(np.float32))
-            action = round(np.argmax(predictions))
+            predictions = np.squeeze(self.brain.predict(s.astype(np.float32)))
+            weight_sqrsum = 0
+            for i in range(self.action_count):
+                if predictions[i] < 0:
+                    predictions[i] = 0
+                else:
+                    weight_sqrsum += math.pow(predictions[i], 2)
+            if weight_sqrsum != 0:
+                dice = random.random() * weight_sqrsum
+                weight_begin = 0
+                for i in range(self.action_count):
+                    if weight_begin < dice and dice < weight_begin + math.pow(
+                            predictions[i], 2):
+                        action = i
+                        break
+                    else:
+                        weight_begin = math.pow(predictions[i], 2)
+            if action == -1:
+                action = round(np.argmax(predictions))
         return action
 
     def observe(self, sample):  # in (s, a, r, s_) format
@@ -41,7 +58,7 @@ class Agent:
         self.epsilon = MIN_EPSILON + (
             MAX_EPSILON - MIN_EPSILON) * math.exp(-LAMBDA * self.steps)
 
-    def replay(self, batch_size = BATCH_SIZE):
+    def replay(self, batch_size=BATCH_SIZE):
         batch = self.memory.sample(batch_size)
         batchLen = len(batch)
 
