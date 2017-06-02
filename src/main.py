@@ -2,14 +2,14 @@ from agent import Agent
 from snake import Handler
 import os
 
-TOTAL_EPISODES = 640000
+TOTAL_EPISODES = 10000
 BATCH_SIZE_BASELINE = 100
 
-WIDTH, HEIGHT = 10, 10
+SHAPE = WIDTH, HEIGHT = 10, 10
 STATE_COUNT, ACTION_COUNT = WIDTH * HEIGHT, 3
 
 agent = Agent(STATE_COUNT, ACTION_COUNT)
-env = Handler(WIDTH, HEIGHT, lambda: save_model())
+env = Handler(SHAPE, lambda: save_model())
 
 
 def run(agent):
@@ -17,7 +17,7 @@ def run(agent):
     R = 0
 
     while True:
-        env.render()
+        # env.render()
 
         a = agent.act(s)
         s_, r, done, info = env.step(a)

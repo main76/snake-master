@@ -7,7 +7,7 @@ from memory import Memory
 MEMORY_CAPACITY = 10000
 BATCH_SIZE = 64
 
-GAMMA = 0.95  # discount factor
+GAMMA = 0.90  # discount factor
 
 MAX_EPSILON = 1
 MIN_EPSILON = 0.01  # stay a bit curious even when getting old
@@ -18,11 +18,11 @@ class Agent:
     steps = 0
     epsilon = MAX_EPSILON
 
-    def __init__(self, STATE_COUNT, ACTION_COUNT):
-        self.brain = Brain(STATE_COUNT, ACTION_COUNT)
+    def __init__(self, state_count, action_count):
+        self.brain = Brain(state_count, action_count)
         self.memory = Memory(MEMORY_CAPACITY)
-        self.state_count = STATE_COUNT
-        self.action_count = ACTION_COUNT
+        self.state_count = state_count
+        self.action_count = action_count
 
     def act(self, s):
         action = -1

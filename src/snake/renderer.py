@@ -11,10 +11,11 @@ CELL = 20
 
 
 class Renderer:
-    def __init__(self, WIDTH, HEIGHT):
-        self.width = WIDTH
-        self.height = HEIGHT
-        self.screen_size = (WIDTH * CELL, HEIGHT * CELL)
+    def __init__(self, shape):
+        width, height = shape
+        self.width = width
+        self.height = height
+        self.screen_size = (width * CELL, height * CELL)
         self.screen = None
         self.clock = None
 
@@ -25,12 +26,10 @@ class Renderer:
             self.clock = g.time.Clock()
             g.display.set_caption('snake ai')
         states = snake.states
-        width = snake.width
-        height = snake.height
         self.screen.fill(BLACK)
-        for x in range(width):
-            for y in range(height):
-                i = x + y * width
+        for x in range(snake.width):
+            for y in range(snake.height):
+                i = x + y * snake.width
                 state = states[i]
                 if state is not 0:
                     rect = (x * CELL, y * CELL, CELL, CELL)

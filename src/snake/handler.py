@@ -3,9 +3,9 @@ from .renderer import Renderer
 
 
 class Handler:
-    def __init__(self, width, height, onexit):
-        self.shape = (width, height)
-        self.renderer = Renderer(width, height)
+    def __init__(self, shape, onexit = None):
+        self.shape = shape
+        self.renderer = Renderer(shape)
         self.onexit = onexit
         self.reset()
 
@@ -23,7 +23,8 @@ class Handler:
     def render(self):
         close = self.renderer.render(self.snake)
         if close:
-            self.onexit()
+            if self.onexit is not None:
+                self.onexit()
             exit(0)
 
     @property
