@@ -1,6 +1,3 @@
-import random
-
-
 class Memory:  # stored as ( s, a, r, s_ )
     samples = []
 
@@ -15,4 +12,4 @@ class Memory:  # stored as ( s, a, r, s_ )
 
     def sample(self, n):
         n = min(n, len(self.samples))
-        return random.sample(self.samples, n)
+        return self.samples[-n:]
