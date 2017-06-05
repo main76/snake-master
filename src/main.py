@@ -1,9 +1,10 @@
 from agent import Agent
 from snake import Handler, CHANNEL
 import os
+import random
 
 TOTAL_EPISODES = 1000000
-BATCH_SIZE_BASELINE = 1000
+BATCH_SIZE_BASELINE = 100
 
 SHAPE = WIDTH, HEIGHT = 10, 10
 INPUT_SHAPE, ACTION_COUNT = (CHANNEL, WIDTH, HEIGHT), 3
@@ -28,7 +29,8 @@ def run(agent):
         agent.observe((s, a, r, s_))
 
         if r is not 0:
-            agent.replay(env.moves)
+            if r > 0 or random.random() < 0.1:
+                agent.replay(env.moves)
 
         s = s_
         R += r
