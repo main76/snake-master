@@ -7,21 +7,21 @@ from memory import Memory
 MEMORY_CAPACITY = 10000
 BATCH_SIZE = 64
 
-GAMMA = 0.9  # discount factor
+GAMMA = 0.8  # discount factor
 
 MAX_EPSILON = 1
 MIN_EPSILON = 0.01  # stay a bit curious even when getting old
-LAMBDA = 0.0001  # speed of decay
+LAMBDA = 0.001  # speed of decay
 
 
 class Agent:
     steps = 0
     epsilon = MAX_EPSILON
 
-    def __init__(self, state_count, action_count):
-        self.brain = Brain(state_count, action_count)
+    def __init__(self, input_shape, action_count):
+        self.brain = Brain(input_shape, action_count)
         self.memory = Memory(MEMORY_CAPACITY)
-        self.state_count = state_count
+        self.input_shape = input_shape
         self.action_count = action_count
 
     def act(self, s):
@@ -62,7 +62,7 @@ class Agent:
         batch = self.memory.sample(batch_size)
         batchLen = len(batch)
 
-        no_state = np.zeros(self.state_count)
+        no_state = np.zeros(self.input_shape)
 
         # CNTK: explicitly setting to float32
         states = np.array([o[0] for o in batch], dtype=np.float32)
@@ -74,7 +74,7 @@ class Agent:
         p_ = self.brain.predict(states_)
 
         # CNTK: explicitly setting to float32
-        x = np.zeros((batchLen, self.state_count)).astype(np.float32)
+        x = np.zeros((batchLen, *self.input_shape)).astype(np.float32)
         y = np.zeros((batchLen, self.action_count)).astype(np.float32)
 
         for i in range(batchLen):

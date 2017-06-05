@@ -1,4 +1,4 @@
-from .snake import Snake
+from .snake import Snake, CHANNEL
 from .renderer import Renderer
 
 
@@ -29,4 +29,4 @@ class Handler:
 
     @property
     def moves(self):
-        return self.snake.moves
+        return self.snake.paces

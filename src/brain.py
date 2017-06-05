@@ -1,27 +1,33 @@
 import cntk as C
 import numpy as np
 
-LEARNING_RATE = 0.001
+LEARNING_RATE = 0.2
 
-HIDDEN_DIM = 256
-LSTM_DIM = 128
+HIDDEN_DIM = 512
+
 
 class Brain:
-    def __init__(self, state_count, action_count):
+    def __init__(self, input_shape, action_count):
         self.model, self.trainer, self.loss = self.__create(
-            state_count, action_count)
+            input_shape, action_count)
 
     # Correspoding layers implementation - Preferred solution
     def create_model(self, input, action_count):
-        z = C.layers.Sequential([
-            C.layers.Dense(HIDDEN_DIM),
-            C.layers.Recurrence(C.layers.LSTM(LSTM_DIM)),
-            C.layers.Dense(action_count)
-        ])
-        return z(input)
+        # with C.layers.default_options(init=C.glorot_uniform()):
+        #     z = C.layers.Sequential(
+        #         [C.layers.Dense(HIDDEN_DIM),
+        #          C.layers.Dense(action_count)])
+        #     return z(input)
 
-    def __create(self, state_count, action_count):
-        observation = C.sequence.input_variable(state_count, np.float32)
+        c1 = C.layers.Convolution2D((3, 3), 16, activation=C.ops.relu)(input)
+        m1 = C.layers.MaxPooling((2, 2), (2, 2))(c1)
+        c2 = C.layers.Convolution2D((3, 3), 32, activation=C.ops.relu)(m1)
+        m2 = C.layers.MaxPooling((2, 2), (2, 2))(c2)
+        z = C.layers.Dense(action_count)(m2)
+        return z
+
+    def __create(self, input_shape, action_count):
+        observation = C.sequence.input_variable(input_shape, np.float32)
         q_target = C.sequence.input_variable(action_count, np.float32)
 
         model = model = self.create_model(observation, action_count)
@@ -42,8 +48,7 @@ class Brain:
         # CNTK: return trainer and loss as well
         return model, trainer, loss
 
-    def train(self, x, y, epoch=1, verbose=0):
-        #self.model.fit(x, y, batch_size=64, nb_epoch=epoch, verbose=verbose)
+    def train(self, x, y):
         arguments = dict(zip(self.loss.arguments, [x, y]))
         updated, results = self.trainer.train_minibatch(
             arguments, outputs=[self.loss.output])

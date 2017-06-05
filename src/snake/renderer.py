@@ -1,12 +1,12 @@
-import time
 import pygame as g
+from .snake import EXIST
 
 ELAPSED = 0.2
 BLACK = (0, 0, 0)
 WHITE = (255, 255, 255)
 SMOKE = (233, 233, 233)
 GRAY = (144, 144, 144)
-PALETTE = [BLACK, WHITE, SMOKE, GRAY]
+PALETTE = [WHITE, SMOKE, GRAY]
 CELL = 20
 
 
@@ -26,14 +26,15 @@ class Renderer:
             self.clock = g.time.Clock()
             g.display.set_caption('snake ai')
         states = snake.states
+        channel, width, height = states.shape
         self.screen.fill(BLACK)
-        for x in range(snake.width):
-            for y in range(snake.height):
-                i = x + y * snake.width
-                state = states[i]
-                if state is not 0:
-                    rect = (x * CELL, y * CELL, CELL, CELL)
-                    g.draw.rect(self.screen, PALETTE[state], rect, 0)
+        for c in range(channel):
+            for x in range(width):
+                for y in range(height):
+                    state = int(states[c][y][x])
+                    if state is EXIST:
+                        rect = (x * CELL, y * CELL, CELL, CELL)
+                        g.draw.rect(self.screen, PALETTE[c], rect, 0)
         g.display.update()
         # self.clock.tick()
         for e in g.event.get():

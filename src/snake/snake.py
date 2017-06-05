@@ -22,6 +22,8 @@ class Snake:
         self.start = 0
         self.scores = 0
         self.food = self.__refresh_food()
+        self.paces = 0
+        self.__states = None
         self.__moves = [self.__up, self.__left, self.__down, self.__right]
 
     def move(self, action):
@@ -34,18 +36,22 @@ class Snake:
         direction = (action - 1 + self.heading) % 4  # magic
         move = self.__moves[direction]
         self.total_moves += 1
+        self.__states = None
         return move()
 
-    def __refresh_food(self):
-        states = numpy.zeros(self.area, dtype=int)
-        for node in self.body:
-            states[node] = BODY
+    def __refresh_food(self, body_state=None):
+        if body_state is None:
+            body_state = numpy.zeros(self.area, dtype=int)
+            for node in self.body:
+                body_state[node] = EXIST
+        else:
+            body_state = numpy.reshape(body_state, self.area)
         ti = randint(0, self.spaces - 1)
         index = 0
         for i in range(self.area):
             if index == ti:
                 return i
-            elif states[i] == SPACE:
+            elif int(body_state[i]) is not EXIST:
                 index += 1
         raise 'Ooops!'
 
@@ -75,12 +81,13 @@ class Snake:
 
     def __move(self, p):
         if self.food == p:
-            self.scores += 1
+            self.scores += REWARD
+            self.paces = self.total_moves - self.start
             self.start = self.total_moves
             self.body.insert(0, p)
             done = len(self.body) == self.spaces
             if not done:
-                self.food = self.__refresh_food()
+                self.food = self.__refresh_food(self.states[BODY])
             return REWARD, done
         self.body.pop()
         if p in self.body:
@@ -89,20 +96,16 @@ class Snake:
         return NO_REWARD, False
 
     @property
-    def moves(self):
-        return self.total_moves - self.start
-
-    @property
     def heading(self):
         head = self.head
-        headnext = self.headnext
-        if head == headnext - self.width:
+        second = self.second
+        if head == second - self.width:
             return 0  # w
-        elif head == headnext - 1:
+        elif head == second - 1:
             return 1  # a
-        elif head == headnext + self.width:
+        elif head == second + self.width:
             return 2  # s
-        elif head == headnext + 1:
+        elif head == second + 1:
             return 3  # d
         else:
             raise 'Ooops!'
@@ -116,21 +119,30 @@ class Snake:
         return self.body[0]
 
     @property
-    def headnext(self):
+    def second(self):
         return self.body[1]
 
     @property
     def states(self):
-        states = numpy.zeros(self.area, dtype=int)
-        for node in self.body:
-            states[node] = BODY
-        states[self.head] = HEAD
-        states[self.food] = FOOD
-        return states
+        if self.__states is None:
+            body_state = numpy.zeros(self.area, dtype=int)
+            for node in self.body:
+                body_state[node] = EXIST
+
+            head_state = numpy.zeros(self.area, dtype=int)
+            head_state[self.head] = EXIST
+
+            food_state = numpy.zeros(self.area, dtype=int)
+            food_state[self.food] = EXIST
+
+            states = numpy.concatenate((body_state, head_state, food_state))
+            self.__states = numpy.reshape(states, (CHANNEL, *self.shape))
+        return self.__states
 
 
-# ENUM
-SPACE = 0
-BODY = 1
-HEAD = 2
-FOOD = 3
+EXIST = 1
+CHANNEL = 3  # head, body, food
+
+BODY = 0
+HEAD = 1
+FOOD = 2
