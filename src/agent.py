@@ -15,11 +15,10 @@ LAMBDA = 0.001  # speed of decay
 
 
 class Agent:
-    steps = 0
-    epsilon = MAX_EPSILON
-
-    def __init__(self, input_shape, action_count):
-        self.brain = Brain(input_shape, action_count)
+    def __init__(self, input_shape, action_count, steps=0, model_path=None):
+        self.steps = steps
+        self.epsilon = MAX_EPSILON if steps == 0 else self.__calc_epsilon(steps)
+        self.brain = Brain(action_count, input_shape=input_shape, model_path=model_path)
         self.memory = Memory(MEMORY_CAPACITY)
         self.input_shape = input_shape
         self.action_count = action_count
@@ -53,11 +52,13 @@ class Agent:
     def observe(self, sample):  # in (s, a, r, s_) format
         self.memory.add(sample)
 
+    def __calc_epsilon(self, steps):
+        return MIN_EPSILON + (MAX_EPSILON - MIN_EPSILON) * math.exp(-LAMBDA * steps)
+
     def replay(self, batch_size=BATCH_SIZE):
         # slowly decrease Epsilon based on our eperience
         self.steps += 1
-        self.epsilon = MIN_EPSILON + (
-            MAX_EPSILON - MIN_EPSILON) * math.exp(-LAMBDA * self.steps)
+        self.epsilon = self.__calc_epsilon(self.steps)
 
         batch = self.memory.sample(batch_size)
         batchLen = len(batch)
@@ -66,9 +67,7 @@ class Agent:
 
         # CNTK: explicitly setting to float32
         states = np.array([o[0] for o in batch], dtype=np.float32)
-        states_ = np.array(
-            [(no_state if o[3] is None else o[3]) for o in batch],
-            dtype=np.float32)
+        states_ = np.array([(no_state if o[3] is None else o[3]) for o in batch], dtype=np.float32)
 
         p = self.brain.predict(states)
         p_ = self.brain.predict(states_)

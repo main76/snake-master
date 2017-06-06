@@ -7,46 +7,52 @@ HIDDEN_DIM = 512
 
 
 class Brain:
-    def __init__(self, input_shape, action_count):
-        self.model, self.trainer, self.loss = self.__create(
-            input_shape, action_count)
+    def __init__(self, action_count, input_shape=None, model_path=None):
+        if model_path is None and input_shape is None:
+            raise 'Ooops!'
+        if model_path is None:
+            self.model, self.trainer, self.loss = self.__create(input_shape, action_count)
+        else:
+            self.model, self.trainer, self.loss = self.__load(model_path, action_count)
 
     # Correspoding layers implementation - Preferred solution
     def create_model(self, input, action_count):
-        # with C.layers.default_options(init=C.glorot_uniform()):
-        #     z = C.layers.Sequential(
-        #         [C.layers.Dense(HIDDEN_DIM),
-        #          C.layers.Dense(action_count)])
-        #     return z(input)
+        z = C.layers.Sequential([
+                C.layers.Convolution2D((3, 3), 16, activation=C.ops.relu),
+                C.layers.MaxPooling((2, 2), (2, 2)),
+                C.layers.Convolution2D((3, 3), 32, activation=C.ops.relu),
+                C.layers.MaxPooling((2, 2), (2, 2)),
+                C.layers.Dense(action_count)
+            ])
+        return z(input)
 
-        c1 = C.layers.Convolution2D((3, 3), 16, activation=C.ops.relu)(input)
-        m1 = C.layers.MaxPooling((2, 2), (2, 2))(c1)
-        c2 = C.layers.Convolution2D((3, 3), 32, activation=C.ops.relu)(m1)
-        m2 = C.layers.MaxPooling((2, 2), (2, 2))(c2)
-        z = C.layers.Dense(action_count)(m2)
-        return z
+    def __load(self, model_path, action_count):
+        model = C.load_model(model_path)        
+        trainer, loss = self.__get_trainer_loss(model, action_count)
+        return model, trainer, loss
 
     def __create(self, input_shape, action_count):
         observation = C.sequence.input_variable(input_shape, np.float32)
-        q_target = C.sequence.input_variable(action_count, np.float32)
+        model = self.create_model(observation, action_count)
+        trainer, loss = self.__get_trainer_loss(model, action_count)
+        return model, trainer, loss
 
-        model = model = self.create_model(observation, action_count)
+    def __get_trainer_loss(self, model, action_count):
+        q_target = C.sequence.input_variable(action_count, np.float32)
 
         # loss='mse'
         loss = C.reduce_mean(C.square(model - q_target), axis=0)
         meas = C.reduce_mean(C.square(model - q_target), axis=0)
 
         # optimizer
-        lr_schedule = C.learning_rate_schedule(LEARNING_RATE,
-                                               C.UnitType.minibatch)
+        lr_schedule = C.learning_rate_schedule(LEARNING_RATE, C.UnitType.minibatch)
         learner = C.sgd(
             model.parameters,
             lr_schedule,
             gradient_clipping_threshold_per_sample=10)
         trainer = C.Trainer(model, (loss, meas), learner)
 
-        # CNTK: return trainer and loss as well
-        return model, trainer, loss
+        return trainer, loss
 
     def train(self, x, y):
         arguments = dict(zip(self.loss.arguments, [x, y]))
