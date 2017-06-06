@@ -29,9 +29,10 @@ class Agent:
             action = random.randint(0, self.action_count - 1)
         else:
             predictions = np.squeeze(self.brain.predict(s.astype(np.float32)))
+            action = round(np.argmax(predictions))
             weight_sqrsum = 0
             for i in range(self.action_count):
-                if predictions[i] < 0:
+                if predictions[i] < 0 or predictions[i] * 3 < predictions[action]:
                     predictions[i] = 0
                 else:
                     weight_sqrsum += math.pow(predictions[i], 2)
@@ -39,14 +40,11 @@ class Agent:
                 dice = random.random() * weight_sqrsum
                 weight_begin = 0
                 for i in range(self.action_count):
-                    if weight_begin < dice and dice < weight_begin + math.pow(
-                            predictions[i], 2):
+                    if weight_begin < dice and dice < weight_begin + math.pow(predictions[i], 2):
                         action = i
                         break
                     else:
-                        weight_begin = math.pow(predictions[i], 2)
-            if action == -1:
-                action = round(np.argmax(predictions))
+                        weight_begin = math.pow(predictions[i], 2)                
         return action
 
     def observe(self, sample):  # in (s, a, r, s_) format
