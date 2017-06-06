@@ -3,7 +3,7 @@ reinforcement learning with [Microsoft CNTK](https://github.com/Microsoft/CNTK).
 
 ## performance
 
-now, the pretrained model can get one or more scores for most of the play.
+now, the pretrained model can get one or more scores for most of the plays.
 
 ## text editor
 
