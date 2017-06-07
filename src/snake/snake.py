@@ -4,7 +4,7 @@ import numpy
 START_LENGTH = 6
 
 REWARD = 1
-NO_REWARD = 0
+NO_REWARD = -0.005
 PUNISHMENT = -0.5
 
 

@@ -32,7 +32,7 @@ class Agent:
             action = round(np.argmax(predictions))
             weight_sqrsum = 0
             for i in range(self.action_count):
-                if predictions[i] < 0 or predictions[i] * 3 < predictions[action]:
+                if predictions[i] < 0 or predictions[i] * 2 < predictions[action]:
                     predictions[i] = 0
                 else:
                     weight_sqrsum += math.pow(predictions[i], 2)
