@@ -1,4 +1,3 @@
-import pygame as g
 from .snake import EXIST
 
 ELAPSED = 0.2
@@ -20,6 +19,7 @@ class Renderer:
         self.clock = None
 
     def render(self, snake):
+        import pygame as g
         if self.screen is None:
             g.init()
             self.screen = g.display.set_mode(self.screen_size)
