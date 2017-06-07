@@ -27,7 +27,7 @@ def run(agent, env, show=False):
             print(info)
             return R
 
-def save_model(name='snake.model'):
+def save_model(agent, name='snake.model'):
     agent.brain.model.save(name)
 
 def log(text):

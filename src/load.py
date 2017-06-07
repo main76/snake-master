@@ -14,7 +14,7 @@ SHAPE = WIDTH, HEIGHT = 10, 10
 INPUT_SHAPE, ACTION_COUNT = (CHANNEL, WIDTH, HEIGHT), 3
 
 agent = Agent(INPUT_SHAPE, ACTION_COUNT, 640000, model_path)
-env = Handler(SHAPE, lambda: save_model())
+env = Handler(SHAPE, lambda: save_model(agent))
 
 os.makedirs(out_path, exist_ok=True)
 os.chdir(out_path)
@@ -30,5 +30,5 @@ while episode_number < TOTAL_EPISODES:
               (episode_number, reward_sum / BATCH_SIZE_BASELINE))
         reward_sum = 0
     if episode_number % 10000 == 0:
-        save_model('snake.%d.model' % round(episode_number / 10000))
+        save_model(agent, 'snake.%d.model' % round(episode_number / 10000))
 save_model()
