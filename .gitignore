@@ -8,6 +8,9 @@ ehthumbs.db
 # Output directories
 output/
 
+# Screenshots directories
+screenshots/
+
 # Folder config file
 Desktop.ini
 
