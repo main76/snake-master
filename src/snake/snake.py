@@ -23,7 +23,6 @@ class Snake:
         self.scores = 0
         self.food = self.__refresh_food()
         self.paces = 0
-        self.__states = None
         self.__moves = [self.__up, self.__left, self.__down, self.__right]
 
     def move(self, action):
@@ -36,27 +35,24 @@ class Snake:
         direction = (action - 1 + self.heading) % 4  # magic
         move = self.__moves[direction]
         self.total_moves += 1
-        self.__states = None
         reward, done = move()
         if done:            
             self.paces = self.total_moves - self.start
             self.start = self.total_moves
         return reward, done
 
-    def __refresh_food(self, body_state=None):
-        if body_state is None:
-            body_state = numpy.zeros(self.area, dtype=int)
-            for node in self.body:
-                body_state[node] = EXIST
-        else:
-            body_state = numpy.reshape(body_state, self.area)
+    def __refresh_food(self):
+        body_state = numpy.zeros(self.area, dtype=int)
+        for node in self.body:
+            body_state[node] = EXIST
         ti = randint(0, self.spaces - 1)
         index = 0
         for i in range(self.area):
-            if index == ti:
+            if int(body_state[i]) is EXIST:
+                continue
+            if ti == index:
                 return i
-            elif int(body_state[i]) is not EXIST:
-                index += 1
+            index += 1
         raise 'Ooops!'
 
     def __left(self):
@@ -87,9 +83,9 @@ class Snake:
         if self.food == p:
             self.scores += REWARD
             self.body.insert(0, p)
-            done = len(self.body) == self.spaces
+            done = self.spaces == 0
             if not done:
-                self.food = self.__refresh_food(self.states[BODY])
+                self.food = self.__refresh_food()
             return REWARD, done
         self.body.pop()
         if p in self.body:
@@ -126,20 +122,19 @@ class Snake:
 
     @property
     def states(self):
-        if self.__states is None:
-            body_state = numpy.zeros(self.area, dtype=int)
-            for node in self.body:
-                body_state[node] = EXIST
+        body_state = numpy.zeros(self.area, dtype=int)
+        for node in self.body:
+            body_state[node] = EXIST
 
-            head_state = numpy.zeros(self.area, dtype=int)
-            head_state[self.head] = EXIST
+        head_state = numpy.zeros(self.area, dtype=int)
+        head_state[self.head] = EXIST
 
-            food_state = numpy.zeros(self.area, dtype=int)
-            food_state[self.food] = EXIST
+        food_state = numpy.zeros(self.area, dtype=int)
+        food_state[self.food] = EXIST
 
-            states = numpy.concatenate((body_state, head_state, food_state))
-            self.__states = numpy.reshape(states, (CHANNEL, *self.shape))
-        return self.__states
+        states = numpy.concatenate((body_state, head_state, food_state))
+        export_states = numpy.reshape(states, (CHANNEL, *self.shape))
+        return export_states
 
 
 EXIST = 1
