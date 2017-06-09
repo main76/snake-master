@@ -4,6 +4,7 @@ import os
 
 EXPECT_SCORES = 16
 EXPECT_MOVES = 200
+OUTPUT_CASES = 3
 
 abs_path = os.path.dirname(os.path.abspath(__file__))
 out_path = os.path.join(abs_path, '..', 'screenshots')
@@ -50,5 +51,10 @@ def replay(agent, env, out_path):
     for i in range(batch_len):
         s = batch[i][0]
         env.screenshot(s, '%d.png' % i)
+    
+    for i in range(3):
+        s = batch[-1][0]
+        env.screenshot(s, '%d.png' % (i + batch_len))
 
-start(out_path)
+for i in range(OUTPUT_CASES):
+    start(os.path.join(out_path, str(i)))
