@@ -4,7 +4,7 @@ import numpy
 START_LENGTH = 6
 
 REWARD = 1
-NO_REWARD = -0.005
+NO_REWARD = 0
 PUNISHMENT = -0.5
 
 
@@ -37,7 +37,11 @@ class Snake:
         move = self.__moves[direction]
         self.total_moves += 1
         self.__states = None
-        return move()
+        reward, done = move()
+        if done:            
+            self.paces = self.total_moves - self.start
+            self.start = self.total_moves
+        return reward, done
 
     def __refresh_food(self, body_state=None):
         if body_state is None:
@@ -82,8 +86,6 @@ class Snake:
     def __move(self, p):
         if self.food == p:
             self.scores += REWARD
-            self.paces = self.total_moves - self.start
-            self.start = self.total_moves
             self.body.insert(0, p)
             done = len(self.body) == self.spaces
             if not done:
