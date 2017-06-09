@@ -11,7 +11,7 @@ GAMMA = 0.8  # discount factor
 
 MAX_EPSILON = 1
 MIN_EPSILON = 0.01  # stay a bit curious even when getting old
-LAMBDA = 0.001  # speed of decay
+LAMBDA = 0.00001  # speed of decay
 
 
 class Agent:
