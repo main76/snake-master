@@ -59,7 +59,7 @@ class Agent:
         self.epsilon = self.__calc_epsilon(self.steps)
 
         batch = self.memory.sample(batch_size)
-        batchLen = len(batch)
+        batch_len = len(batch)
 
         no_state = np.zeros(self.input_shape)
 
@@ -71,10 +71,10 @@ class Agent:
         p_ = self.brain.predict(states_)
 
         # CNTK: explicitly setting to float32
-        x = np.zeros((batchLen, *self.input_shape)).astype(np.float32)
-        y = np.zeros((batchLen, self.action_count)).astype(np.float32)
+        x = np.zeros((batch_len, *self.input_shape)).astype(np.float32)
+        y = np.zeros((batch_len, self.action_count)).astype(np.float32)
 
-        for i in range(batchLen):
+        for i in range(batch_len):
             s, a, r, s_ = batch[i]
 
             # CNTK: [0] because of sequence dimension
