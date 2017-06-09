@@ -21,11 +21,14 @@ class Handler:
         return self.snake.states, reward, done, info
 
     def render(self):
-        close = self.renderer.render(self.snake)
+        close = self.renderer.render(self.snake.states)
         if close:
             if self.onexit is not None:
                 self.onexit()
             exit(0)
+
+    def screenshot(self, states, output_path):
+        self.renderer.screenshot(states, output_path)
 
     @property
     def moves(self):

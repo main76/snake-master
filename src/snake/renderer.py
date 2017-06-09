@@ -18,14 +18,13 @@ class Renderer:
         self.screen = None
         self.clock = None
 
-    def render(self, snake):
+    def render(self, states):
         import pygame as g
         if self.screen is None:
             g.init()
             self.screen = g.display.set_mode(self.screen_size)
             self.clock = g.time.Clock()
             g.display.set_caption('snake ai')
-        states = snake.states
         channel, width, height = states.shape
         self.screen.fill(BLACK)
         for c in range(channel):
@@ -41,3 +40,9 @@ class Renderer:
             if e.type is g.QUIT:
                 return True
         return False
+    
+    def screenshot(self, states, output_path):
+        import pygame as g
+        self.render(states)
+        self.clock.tick()
+        g.image.save(self.screen, output_path)
