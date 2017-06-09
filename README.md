@@ -5,7 +5,7 @@ reinforcement learning with [Microsoft CNTK](https://github.com/Microsoft/CNTK).
 
 now, the pretrained model can get an average of 5 scores for each game.
 
-![snake-master](https://master76.github.io/res/snake-master.19-196.gif)
+![snake-master](https://master76.github.io/res/snake-master-example.gif)
 
 log:
 
