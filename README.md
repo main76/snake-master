@@ -25,7 +25,7 @@ Episode: 640000, Average reward and score for episode: 4.712000, 5.212.
 
 ## text editor
 
-[Microsoft Visual Studio Code](https://github.com/Microsoft/vscode) an awesome editor.
+[Visual Studio Code](https://github.com/Microsoft/vscode) an awesome editor.
 
 ## entry
 
