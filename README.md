@@ -3,24 +3,24 @@ reinforcement learning with [Microsoft CNTK](https://github.com/Microsoft/CNTK).
 
 ## performance
 
-now, the pretrained model can get an average of 5 scores for each game.
+now, the pretrained model can get an average of 7.7 scores for each game.
 
 ![snake-master](https://master76.github.io/res/snake-master-example.gif)
 
 log:
 
 ```plain text
-Episode: 1000, Average reward and score for episode: -0.425000, 0.075.
-Episode: 2000, Average reward and score for episode: -0.437000, 0.063.
-Episode: 3000, Average reward and score for episode: -0.429000, 0.071.
-Episode: 4000, Average reward and score for episode: -0.419000, 0.081.
-Episode: 5000, Average reward and score for episode: -0.422000, 0.078.
+Episode: 10000, Average reward and score for episode: -0.424200, 0.076.
+Episode: 20000, Average reward and score for episode: -0.417600, 0.082.
+Episode: 30000, Average reward and score for episode: -0.415300, 0.085.
+Episode: 40000, Average reward and score for episode: -0.415300, 0.085.
+Episode: 50000, Average reward and score for episode: -0.416800, 0.083.
 ......
-Episode: 636000, Average reward and score for episode: 4.838000, 5.338.
-Episode: 637000, Average reward and score for episode: 4.797000, 5.297.
-Episode: 638000, Average reward and score for episode: 4.620000, 5.120.
-Episode: 639000, Average reward and score for episode: 4.812000, 5.312.
-Episode: 640000, Average reward and score for episode: 4.712000, 5.212.
+Episode: 2520000, Average reward and score for episode: 7.137500, 7.638.
+Episode: 2530000, Average reward and score for episode: 7.141700, 7.642.
+Episode: 2540000, Average reward and score for episode: 7.214600, 7.715.
+Episode: 2550000, Average reward and score for episode: 7.213900, 7.714.
+Episode: 2560000, Average reward and score for episode: 7.105500, 7.606.
 ```
 
 ## text editor
