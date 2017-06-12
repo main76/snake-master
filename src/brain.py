@@ -2,9 +2,11 @@ import cntk as C
 import numpy as np
 
 LEARNING_RATE = 0.2
-
 HIDDEN_DIM = 512
 
+def SET_LEARNING_RATE(value):
+    global LEARNING_RATE
+    LEARNING_RATE = value
 
 class Brain:
     def __init__(self, action_count, input_shape=None, model_path=None):

@@ -8,12 +8,15 @@ OUTPUT_CASES = 3
 
 abs_path = os.path.dirname(os.path.abspath(__file__))
 out_path = os.path.join(abs_path, '..', 'screenshots')
-model_path = os.path.join(abs_path, '..', 'pretrained', 'snake.10x10_640k.model')
+model_path = os.path.join(abs_path, '..', 'pretrained', 'snake.10x10_2.56m.model')
 
 agent = Agent(INPUT_SHAPE, ACTION_COUNT, 640000, model_path)
 env = Handler(SHAPE)
 
-def start(out_path):
+def start(out_path, infinite_loop = True):
+    if infinite_loop:
+        global EXPECT_SCORES
+        EXPECT_SCORES = float('inf')
     run(agent, env, out_path)
 
 def run(agent, env, out_path):

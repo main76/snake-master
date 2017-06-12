@@ -35,7 +35,7 @@ class Renderer:
                         rect = (x * CELL, y * CELL, CELL, CELL)
                         g.draw.rect(self.screen, PALETTE[c], rect, 0)
         g.display.update()
-        # self.clock.tick()
+        self.clock.tick(30)
         for e in g.event.get():
             if e.type is g.QUIT:
                 return True

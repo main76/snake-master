@@ -1,7 +1,7 @@
 import math
 import random
 import numpy as np
-from brain import Brain
+from brain import Brain, SET_LEARNING_RATE
 from memory import Memory
 
 MEMORY_CAPACITY = 10000
@@ -13,9 +13,14 @@ MAX_EPSILON = 1
 MIN_EPSILON = 0.01  # stay a bit curious even when getting old
 LAMBDA = 0.00001  # speed of decay
 
+def SET_MIN_EPSILON(value):
+    global MIN_EPSILON
+    MIN_EPSILON = value
 
 class Agent:
-    def __init__(self, input_shape, action_count, steps=0, model_path=None):
+    def __init__(self, input_shape, action_count, steps=0, model_path=None, learning_rate=None):
+        if learning_rate is not None:
+            SET_LEARNING_RATE(learning_rate)
         self.steps = steps
         self.epsilon = MAX_EPSILON if steps == 0 else self.__calc_epsilon(steps)
         self.brain = Brain(action_count, input_shape=input_shape, model_path=model_path)
