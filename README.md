@@ -33,6 +33,8 @@ src/train.py train with 640k episodes.
 
 src/load.py load pretrained model, proceed training.
 
+src/pref.py load pretrained model, show how it acts. (requires pygame)
+
 ## dependences
 
 cntk@2.0 cpu-only
