@@ -6,7 +6,7 @@ SHAPE = WIDTH, HEIGHT = 10, 10
 INPUT_SHAPE, ACTION_COUNT = (CHANNEL, WIDTH, HEIGHT), 3
 CHECKPOINT_FREQ = 80000
 
-def start(agent, out_path, TOTAL_EPISODES=640000, BATCH_SIZE_BASELINE=1000, show=False):
+def start(agent, out_path, TOTAL_EPISODES=640000, BATCH_SIZE_BASELINE=10000, show=False):
     os.makedirs(out_path, exist_ok=True)
     os.chdir(out_path)
 

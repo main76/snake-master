@@ -8,4 +8,4 @@ model_path = os.path.join(abs_path, '..', 'pretrained', 'snake.10x10_0.64m.model
 
 # SET_MIN_EPSILON(0) still keep curious
 agent = Agent(INPUT_SHAPE, ACTION_COUNT, 640000, model_path, 0.2)
-start(agent, out_path, TOTAL_EPISODES=2560000, show=False)
+start(agent, out_path, 2560000, show=False)
