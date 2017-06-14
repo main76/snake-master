@@ -1,10 +1,12 @@
 from utils import INPUT_SHAPE, ACTION_COUNT, SHAPE, Handler
-from agent import Agent
+from agent import Agent, SET_MIN_EPSILON
 import os
 
 EXPECT_SCORES = 16
 EXPECT_MOVES = 200
 OUTPUT_CASES = 3
+
+SET_MIN_EPSILON(0)
 
 abs_path = os.path.dirname(os.path.abspath(__file__))
 out_path = os.path.join(abs_path, '..', 'screenshots')
