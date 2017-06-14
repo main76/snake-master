@@ -12,7 +12,7 @@ def start(agent, out_path, TOTAL_EPISODES=640000, BATCH_SIZE_BASELINE=1000, show
 
     env = Handler(SHAPE, lambda: save_model(agent))
 
-    episode_number = 0
+    episode_number = agent.steps
     reward_sum = 0
     score_sum = 0
 
