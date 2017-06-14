@@ -127,7 +127,7 @@ class Snake:
             body_state[node] = EXIST
 
         head_state = numpy.zeros(self.area, dtype=int)
-        head_state[self.head] = EXIST
+        head_state[self.head] = EXIST + self.heading # magics
 
         food_state = numpy.zeros(self.area, dtype=int)
         food_state[self.food] = EXIST
