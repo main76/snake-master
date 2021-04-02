@@ -9,7 +9,7 @@ add the heading information to the input features, now the training is more effi
 
 now, the pretrained model can get an average of 7.7 scores for each game.
 
-![snake-master](https://master76.github.io/res/snake-master-example.gif)
+![snake-master](https://main76.github.io/res/snake-master-example.gif)
 
 old log:
 
